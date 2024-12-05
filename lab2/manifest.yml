@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-for-lab2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-for-lab2
+  template:
+    metadata:
+      labels:
+        app: frontend-for-lab2
+    spec:
+      containers:
+        - name: frontend-for-lab2
+          image: ifilyaninitmo/itdt-contained-frontend:master
+          env:
+            - name: REACT_APP_USERNAME
+              value: "apschni"
+            - name: REACT_APP_COMPANY_NAME
+              value: "bebracorp"
+          ports:
+            - containerPort: 3000
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-for-lab2
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: frontend-for-lab2
