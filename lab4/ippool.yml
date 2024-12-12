@@ -1,0 +1,19 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+   name: us-ippool
+spec:
+   cidr: 10.10.0.0/24
+   ipipMode: Always
+   natOutgoing: true
+   nodeSelector: zone == "eu"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+   name: eu-ippool
+spec:
+   cidr: 10.10.1.0/24
+   ipipMode: Always
+   natOutgoing: true
+   nodeSelector: zone == "us"

@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  REACT_APP_USERNAME: "apschni"
+  REACT_APP_COMPANY_NAME: "bebracorp"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-for-lab4
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-for-lab4
+  template:
+    metadata:
+      labels:
+        app: frontend-for-lab4
+    spec:
+      containers:
+        - name: frontend-for-lab4
+          image: ifilyaninitmo/itdt-contained-frontend:master
+          resources: 
+            limits:
+              memory: "812M"
+              cpu: "1"
+          envFrom:
+            - configMapRef:
+                name: frontend-config
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lab4-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend-for-lab4
+  ports:
+    - port: 3000
+      targetPort: 3000
